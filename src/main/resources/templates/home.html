@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <title>Url Shortify</title>
+</head>
+<body>
+<h1>Welcome!</h1>
+
+<p>Click <a th:href="@{/web/statistics}">here</a> to see statistics.</p>
+<p>Or shortify a Url:
+<form th:action="@{/shortifyUrl}" method="post">
+    <div><label> Url : <input type="text" name="url"/> </label></div>
+    <div><input type="submit" value="Shortify"/></div>
+</form>
+</p>
+<p th:unless="${param.shortUrl == null}">
+    Your last URL: <a th:text="${param.shortUrl[0]}" th:href="${param.shortUrl[0]}">No ShortUrl</a>
+</p>
+</body>
+</html>

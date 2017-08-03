@@ -74,14 +74,14 @@ public class ShortUrlRepositoryImpl implements ShortUrlRepositoryCustom {
     }
 
     private String createKeyFromCountArray(int[] counts){
-        String key = BASE_KEY;
+        StringBuilder key = new StringBuilder(BASE_KEY);
         for(int index=0;index<counts.length;index++){
             int keyPos = MAX_KEY_POS - index;
             int value = BASE_KEY.charAt(keyPos);
             value+=counts[index];
             char c = (char) value;
-            key = key.replace(BASE_KEY.charAt(keyPos),c);
+            key.setCharAt(keyPos, c);
         }
-        return key;
+        return key.toString();
     }
 }

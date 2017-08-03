@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
+import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -19,6 +20,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @RestController
 public class RedirectController {
 
+    static Logger logger = Logger.getLogger(RedirectController.class.getName());
+
     @Autowired
     ShortUrlRepository repository;
 
@@ -28,7 +31,7 @@ public class RedirectController {
             ShortUrl url = repository.findByShortUrl(shortUrl);
             if(null!=url) {
                 repository.updateRedirectCount(url);
-                System.out.println("Redirecting localhost:8080/" + shortUrl + " to " + url.getUrl());
+                logger.info("Redirecting localhost:8080/" + shortUrl + " to " + url.getUrl());
                 response.sendRedirect(url.getUrl());
             }
         }
@@ -39,12 +42,12 @@ public class RedirectController {
     public RedirectView saveShortUrl(@RequestParam String url, HttpServletResponse response, RedirectAttributes attributes) throws IOException {
         ShortUrl shortUrl = repository.findByUrl(url);
         if(null==shortUrl){
-            System.out.println("Saving url: " + url);
+            logger.info("Saving url: " + url);
             shortUrl = repository.save(url);
-            attributes.addAttribute("shortUrl","http://localhost:8080/" + shortUrl.getShortUrl());
         } else {
             repository.updateShortifyCount(shortUrl);
         }
+        attributes.addAttribute("shortUrl","http://localhost:8080/" + shortUrl.getShortUrl());
         return new RedirectView("/web/home");
     }
 }
